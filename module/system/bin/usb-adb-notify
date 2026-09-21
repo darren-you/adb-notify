@@ -1,9 +1,9 @@
 #!/system/bin/sh
 
-MODDIR="/data/adb/modules/usb_adb_notify_toggle"
+MODDIR="/data/adb/modules/usb-adb-notify-toggle"
 
 if [ ! -f "$MODDIR/common.sh" ]; then
-  echo "usb_adb_notify_toggle module is not installed or not enabled."
+  echo "usb-adb-notify-toggle module is not installed or not enabled."
   exit 1
 fi
 

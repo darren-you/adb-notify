@@ -45,7 +45,7 @@ USB 充电/连接通知没有对应的 `persist.adb.notify` 属性开关，模�
 
 ## 安装
 
-下载 release 中的 `usb_adb_notify_toggle-v1.0.2.zip`，在 Magisk 中安装，然后重启。
+下载 release 中的 `usb-adb-notify-toggle-v1.0.2.zip`，在 Magisk 中安装，然后重启。
 
 也可以本地构建：
 
@@ -96,7 +96,7 @@ scripts/
 
 ## 工作区治理
 
-本仓库纳入 `darren_space` 后按轻量 tooling repo 管理：
+本仓库纳入 `darren-space` 后按轻量 tooling repo 管理：
 
 - 工作区标准入口：`../../harness/docs/workspace/standards/README.md`
 - 终端脚本输出标准：`../../harness/docs/workspace/standards/tooling/terminal_output_golden_path.md`

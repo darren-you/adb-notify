@@ -1,4 +1,4 @@
-id=usb_adb_notify_toggle
+id=usb-adb-notify-toggle
 name=USB Notify Toggle
 version=1.0.2
 versionCode=3
