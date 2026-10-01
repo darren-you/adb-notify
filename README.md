@@ -100,7 +100,7 @@ scripts/
 
 - 工作区标准入口：`../../harness/docs/workspace/standards/README.md`
 - 终端脚本输出标准：`../../harness/docs/workspace/standards/tooling/terminal_output_golden_path.md`
-- Magisk 模块标准：`../../harness/docs/workspace/standards/magisk_module/magisk_module_golden_path.md`
+- Magisk 模块标准：`../../harness/docs/workspace/standards/magisk-module/magisk_module_golden_path.md`
 
 ## 参考资料
 
