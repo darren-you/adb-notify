@@ -14,7 +14,7 @@
 - 在 darren-space 中提交、推送和依赖同步使用工作区 Git 入口及共享记录锁；独立 checkout 的开发和测试不以该入口可用为前提。第一方默认分支保持 master；逻辑仓名、GitHub 仓名与 checkout basename 使用同一 kebab-case 身份，所属路径由 resolver 读取。部署单元、语言模块和平台安装身份按各自命名空间显式映射，不要求与仓名同一个字符串。
 - 统一发布仍通过 darren-space 的 Fast Deploy。需要发布时读取实际 deploy_config.sh 与已登记 Job；本地测试和 Git 保存分别报告，不能等同于线上发布通过。
 - 敏感配置只消费明确授权的既有事实源，不回显值，不因时间、私有会话读取或一般建议自行更换凭据。
-- 涉及数据库、持久化、迁移或字段映射时，先修改真实 Schema、迁移、源码及全部实际消费者，再同步文档。聚合检查和发布遵循 `harness/docs/workspace/standards/database/database_golden_path.md`，项目本地验证按本仓说明执行。
+- 涉及数据库、持久化、迁移或字段映射时，先修改真实 Schema、迁移、源码及全部实际消费者，再同步文档。聚合检查和发布遵循 `harness/docs/workspace/standards/database/database-golden-path.md`，项目本地验证按本仓说明执行。
 
 ## 命名规范与硬切边界
 
@@ -58,11 +58,11 @@
 - 普通 REST JSON 的客户端 DTO 与真实网络解码入口必须共同遵守 `code / timestamp / msg / data` 四字段合同；不能把 TypeScript 类型断言、Swift 合成解码或模板文件一致当作运行时验证。`timestamp` 与 `msg` 必需，`data:null` 不能与缺少 `data` 混同；拒绝额外顶层字段、旧 `message`、旧成功码 `0` 和裸业务 JSON 兼容路径。
 - Auth 错误严格按唯一 OpenAPI 的 `data.error_code` 与已声明关联字段解析，禁止退回旧 `data.error.code/message`。请求关联的命名目标为 `request_id`／`Request-Id`，真实 tracing 才使用 `trace_id`；切换必须同时闭合 OpenAPI、Server、SDK、受管派生模块及真实解码，不能仅改客户端或新增双字段兼容。HTTP 失败和业务失败均不能被客户端当作成功返回；health 按同一 envelope 读取 `data.service`。
 - 新增或修改 DTO、JSON 网络读取、错误映射时，必须运行该工程真实请求/解码回归；聚合检查与发布时另运行 `python3 harness/scripts/check_client_response_contract.py --repo <逻辑仓库名>`；回归至少覆盖成功、失败、null、缺字段、额外字段和旧格式。Web 的 DTO 回归必须进入实际 `npm run build` 链路，不能只留下不会执行的测试文件；Swift 测试必须进入实际使用的 SwiftPM / Xcode target。
-- 客户端合同检查由工程标准、总治理和对应构建发布链路执行；Git push 与 dry-run 只负责保存和传输代码快照，不执行该质量检查，允许 task 在未完成时保存。发现新解析形态时扩展检查器及失败回归，不能添加产品白名单或仅靠 AGENTS 口头保证；push 成功不能替代构建、测试和发布验证。完整边界见 `harness/docs/workspace/standards/client_response_contract.md`。
+- 客户端合同检查由工程标准、总治理和对应构建发布链路执行；Git push 与 dry-run 只负责保存和传输代码快照，不执行该质量检查，允许 task 在未完成时保存。发现新解析形态时扩展检查器及失败回归，不能添加产品白名单或仅靠 AGENTS 口头保证；push 成功不能替代构建、测试和发布验证。完整边界见 `harness/docs/workspace/standards/client-response-contract.md`。
 
 ## ADB Notify Scope
 
 - 本仓库维护 USB 系统通知开关 Magisk 模块。
 - 模块只处理“已连接到 USB 调试”通知和“正在通过 USB 为此设备充电”通知，不处理第三方前台服务通知。
 - 生成的安装 zip 属于构建产物，默认不提交；正式可安装包通过 GitHub Release 发布。
-- Magisk 模块相关行为优先参考 `harness/docs/workspace/standards/magisk-module/magisk_module_golden_path.md`，以及当前仓库 README 中的实际边界。
+- Magisk 模块相关行为优先参考 `harness/docs/workspace/standards/magisk-module/magisk-module-golden-path.md`，以及当前仓库 README 中的实际边界。
