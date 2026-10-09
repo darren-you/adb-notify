@@ -47,7 +47,7 @@
 
 ### 发布身份与实施验收
 
-- 部署单元统一 `<repo-id>-<role>`，同一单元的 Job name 与 `PROJECT_NAME` 精确相等，产生制品时 `artifact_contract.project_name` 也必须一致；物理目录由显式配置定位，移动目录不暗中更换发布身份。部署设备目标用 `deploy_target`／`DEPLOY_TARGET`，多目标 `deploy_targets`；`build_host` 表达构建宿主，`region` 只表达真实地域。设备身份从既有 inventory／resolver 读取，不另建别名表。
+- 单一基础设施职责的发布单元直接使用 `<repo-id>`（如 `nginx-service`、`autossl-service`）；具有独立 Server、Web、App 工程或多个真实职责的发布单元使用 `<repo-id>-<role>`，同一单元的 Job name 与 `PROJECT_NAME` 精确相等，产生制品时 `artifact_contract.project_name` 也必须一致；物理目录由显式配置定位，移动目录不暗中更换发布身份。部署设备目标用 `deploy_target`／`DEPLOY_TARGET`，多目标 `deploy_targets`；`build_host` 表达构建宿主，`region` 只表达真实地域。设备身份从既有 inventory／resolver 读取，不另建别名表。
 - 没有部署设备维度的 Job／制品不填 `deploy_target`；不得塞入 `global` 或构建宿主，也不为无行为差异新增范围字段。旧维度切换必须覆盖 UI、API、JobManifest、队列／持久化记录、调度、脚本、制品构造／解析／匹配与真实发布；缺省目标不能成为匹配任意设备的通配符。
 - Compose 自有 service／network／volume key 和容器／服务自有名 kebab-case；模型 key、实际资源名、挂载与生命周期分别验证，已合规实际名不因 key 改名搬迁。显式 `name` 不保证指向已有数据，不得误建空卷。systemd 使用 `<service-id>.service`，launchd Label 使用 `com.xdarren.<product>.<role>`；Apple／Android 安装身份按受控反域名及平台注册合同，不能把改名变成新安装身份或权限对象。
 - 一个硬切批次由完整消费者集合决定；声明、生成器、源码、测试、配置、存储与运行面一次收敛，不保留自有旧名别名、软链接、双字段读写、双 topic 或旧路由。允许一次性离线转换读取旧格式，完成后删除迁移接线；外部平台原生重定向／标准解析不冒充自有兼容层。离线设备、已安装客户端或不可变平台 ID 未具备切换条件时，明确尚未完成，不能伪造闭环。
