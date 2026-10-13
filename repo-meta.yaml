@@ -4,7 +4,6 @@ workspace_area: tooling
 archetype: tooling-repo
 lifecycle: active
 owner: darren-you
-governance_tier: standard
 domains:
   - magisk-module
 domain_roots:
@@ -15,10 +14,6 @@ delivery_surfaces:
 depends_on: []
 default_workflows:
   - build-magisk-module
-doc_status:
-  architecture: present
-  api: not-applicable
-  release: present
 github:
   repo: darren-you/adb-notify
   about: Magisk 模块，用于切换 Android USB 调试与 USB 充电/连接通知
