@@ -72,7 +72,7 @@ su -c usb-adb-notify toggle
 
 ## 注意
 
-- 本模块只处理 USB 调试通知和 USB 充电/连接通知，不处理 FIClash、VPN、投屏、文件传输工具等第三方前台服务通知。
+- 本模块只处理 USB 调试通知和 USB 充电/连接通知，不处理 sing-box、VPN、投屏、文件传输工具等第三方前台服务通知。
 - `post-fs-data.sh` 会在开机早期写入属性，`service.sh` 会在晚启动阶段补做当前通知隐藏。
 - 从隐藏切回显示时，通知不一定立刻重新出现；通常需要重插 USB、切换 USB 调试或重启后触发系统重新发通知。
 - 卸载模块时会恢复 `persist.adb.notify=1`，并 unsnooze 当前模块处理的系统通知，避免把设备长期留在隐藏状态。
