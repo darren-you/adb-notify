@@ -13,6 +13,8 @@
 - 已登记事项按真实完成条件维护进度，提交、本地测试、发布和业务验收分别判断。Issue 归属 `darren-you/darren-space`，PR 属于实际代码仓。
 - [#25](https://github.com/darren-you/darren-space/issues/25) 是唯一永久开放的治理入口，记录治理工程和后续优化点，永不关闭；具体事项与独立批次分别验收，候选记录不自动授权实施。其他 Issue 按自身完整范围判断结束。
 
+- 自建仓默认 `master`，当前保留 `1.0.0` 及真实未完成工作的 `feature-`、`hotfix-`、`bugfix-` 分支，清理前保全提交、PR 与 worktree。正式包版本等于冻结数字分支，构建号持久递增且不清零；普通 Git 操作不建分支或切分支。唯一规范见工作区 `harness/docs/workspace/standards/` 的 `naming-conventions.md`、`client-version-golden-path.md`。
+
 ## 自主决策与提问
 
 先自行核实技术事实，完成已授权的工作；常规实现选择直接决定。仅在缺少不可替代输入，或选择会实质改变范围、业务、数据、费用或权限且不能推断时提问。必要授权必须等待真实答复，默认选中和超时不等于确认。

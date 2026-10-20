@@ -1,6 +1,6 @@
 id=usb-adb-notify-toggle
 name=USB Notify Toggle
-version=1.0.2
-versionCode=3
+version=@VERSION@
+versionCode=@BUILD_NUMBER@
 author=DarrenYou
 description=Toggle Android USB debugging and USB charging notifications. Default: hide. Use the Magisk action button or su -c usb-adb-notify on/off/status.

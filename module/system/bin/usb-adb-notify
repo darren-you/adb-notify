@@ -10,6 +10,10 @@ fi
 . "$MODDIR/common.sh"
 
 case "$1" in
+  --build-info)
+    cat "$MODDIR/build.json"
+    exit $?
+    ;;
   off|hide|disable|0)
     write_notify 0
     apply_notify 0
@@ -38,7 +42,7 @@ case "$1" in
     exit 0
     ;;
   *)
-    echo "Usage: su -c usb-adb-notify [on|off|toggle|status]"
+    echo "Usage: su -c usb-adb-notify [on|off|toggle|status|--build-info]"
     exit 2
     ;;
 esac

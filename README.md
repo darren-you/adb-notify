@@ -45,7 +45,7 @@ USB 充电/连接通知没有对应的 `persist.adb.notify` 属性开关，模�
 
 ## 安装
 
-下载 release 中的 `usb-adb-notify-toggle-v1.0.2.zip`，在 Magisk 中安装，然后重启。
+从 GitHub Release 选择已发布且核验过的安装 ZIP，在 Magisk 中安装后重启。历史制品保留原版本与字节；当前源码目标为 `1.0.0`，源码修改和本地构建不代表已经发布或完成设备升级。
 
 也可以本地构建：
 
@@ -53,7 +53,21 @@ USB 充电/连接通知没有对应的 `persist.adb.notify` 属性开关，模�
 ./scripts/build.sh
 ```
 
-构建产物会生成在 `dist/`。
+本地验证产物为 `dist/usb-adb-notify-toggle-1.0.0-local.zip`，包内明确标记 `local_validation=true`，`versionCode=0`，不占正式构建号。构建保留 `dist/` 中其他制品，正式包按版本和构建号命名，不覆盖不同字节的同号包。
+
+## 版本与构建号
+
+`release.json` 声明与冻结数字分支相同的产品版本。`module/module.prop` 的版本字段是模板，实际 ZIP 的 `version`、`versionCode` 和 `build.json` 由同一输入生成；正式 `versionCode` 等于 Core 分配的通用构建号，并限制在 Magisk Manager 的正整数容量 `1..2147483647`。不沿用源码中的手写编号，也不在模块仓维护计数器。
+
+正式调用方先按统一机制核定模块 ID 的历史高水位并冻结源码、Core 和版本快照，再提供同次 `FAST_DEPLOY_*` context、`FAST_DEPLOY_CLIENT_VERSION_SNAPSHOT_FILE` 及显式 `FAST_DEPLOY_PACKAGE_CORE_ROOT`。入口核对该 Core 的精确提交、干净源码、模块身份和 `any` 架构，打包后由同一 Core 回读最终 ZIP。缺少正式输入时失败，不回落本地包。独立本地构建只需要 Python 标准库；不依赖相邻可变 checkout，不新增发布 Job，也不会上传或安装模块。
+
+包旁的 JSON 收据记录包内身份、ZIP SHA-256 和实际大小；已安装模块可用 `su -c usb-adb-notify --build-info` 读取原包身份。包回读成功与 Android/Magisk 实际安装升级分别验收。历史源码编号 `3` 仅是已知下界，正式状态初始化仍须核对完整分发历史。
+
+```bash
+python3 scripts/test_build_package.py
+# 显式测试候选 Core；测试自行建立临时 Git 仓与状态，不改生产状态。
+FAST_DEPLOY_TEST_PACKAGE_CORE_ROOT=/absolute/fast-deploy-core python3 scripts/test_build_package.py
+```
 
 ## 使用
 
@@ -64,6 +78,7 @@ su -c usb-adb-notify status
 su -c usb-adb-notify off
 su -c usb-adb-notify on
 su -c usb-adb-notify toggle
+su -c usb-adb-notify --build-info
 ```
 
 `off` 会设置 `persist.adb.notify=0`，并隐藏 USB 调试通知与 USB 充电/连接通知。
@@ -105,7 +120,7 @@ scripts/
 ## 参考资料
 
 - AOSP `UsbDeviceManager`：<https://android.googlesource.com/platform/frameworks/base/+/5ac72a2/services/java/com/android/server/usb/UsbDeviceManager.java>
-- Magisk Developer Guides：<https://magisk.readthedocs.io/en/latest/developers/guides.html>
+- [Magisk 模块格式](https://topjohnwu.github.io/Magisk/guides.html#moduleprop)与 [Manager 原生 versionCode 类型](https://github.com/topjohnwu/Magisk/blob/master/app/core/src/main/java/com/topjohnwu/magisk/core/model/module/Module.kt)。
 
 ## License
 
