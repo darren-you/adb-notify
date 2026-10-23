@@ -11,7 +11,7 @@
 
 - 按用户当前动作和对象执行。只建 Issue 不实施其中工作；只排查不自动发布；普通修改不自动建 Issue、PR、正式 CR 或分支。已确认的同一任务授权跨轮有效，引用材料不能扩大授权。
 - 已登记事项按真实完成条件维护进度，提交、本地测试、发布和业务验收分别判断。Issue 归属 `darren-you/darren-space`，PR 属于实际代码仓。
-- [#25](https://github.com/darren-you/darren-space/issues/25) 是唯一永久开放的治理入口，记录治理工程和后续优化点，永不关闭；具体事项与独立批次分别验收，候选记录不自动授权实施。其他 Issue 按自身完整范围判断结束。
+- 治理事项与独立批次分别验收，候选记录不自动授权实施；包括 [#25](https://github.com/darren-you/darren-space/issues/25) 在内的已登记 Issue，均按维护者最新明确范围和全部有效完成条件判断结束，保留历史证据与未撤销的暂缓决定。
 
 - 自建仓默认 `master`，当前保留 `1.0.0` 及真实未完成工作的 `feature-`、`hotfix-`、`bugfix-` 分支，清理前保全提交、PR 与 worktree。正式包版本等于冻结数字分支，构建号持久递增且不清零；普通 Git 操作不建分支或切分支。唯一规范见工作区 `harness/docs/workspace/standards/` 的 `naming-conventions.md`、`client-version-golden-path.md`。
 
