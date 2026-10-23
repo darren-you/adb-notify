@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "repo_name": "adb-notify",
+  "config_path": "release.json",
+  "platform": "module",
+  "application_id": "usb-adb-notify-toggle",
+  "variant": "release",
+  "architectures": ["any"],
+  "entry": "scripts/build.sh",
+  "artifact": "usb-adb-notify-toggle.zip",
+  "identity_entry": "build.json",
+  "input_commands": [["python3", "--version"]]
+}

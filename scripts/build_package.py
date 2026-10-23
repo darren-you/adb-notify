@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import stat
 import subprocess
 import sys
@@ -45,7 +46,7 @@ def resolve(root, module_id):
             raise ValueError("正式模块需要显式冻结的 FAST_DEPLOY_PACKAGE_CORE_ROOT")
         command = [sys.executable, str(Path(core) / "shared/package_identity.py"),
                    "resolve", "--project-root", str(root), "--platform", "module",
-                   "--application-id", module_id, "--architecture", "any"]
+                   "--application-id", module_id, "--architecture", "any", "--variant", "release"]
         value = json.loads(subprocess.check_output(command))
         if value["local_validation"] is not False or not 1 <= value["build_number"] <= 2147483647:
             raise ValueError("正式模块构建号必须在 Magisk versionCode 的 Int 容量内")
@@ -81,7 +82,15 @@ def verify(path, value, expected_files):
             "artifact_bytes": path.stat().st_size}
 
 
-def build(root):
+def build(root, artifact=None):
+    if artifact is not None:
+        artifact = Path(artifact)
+        if (not artifact.is_absolute() or artifact.suffix != ".zip"
+                or artifact.parent.resolve() != artifact.parent or not artifact.parent.is_dir()
+                or artifact.is_symlink()):
+            raise ValueError("正式 run 的输出必须是已有目录下的绝对 ZIP 路径，且不得经过符号链接")
+        if not os.environ.get("FAST_DEPLOY_RUN_ID") or not os.environ.get("FAST_DEPLOY_CLIENT_VERSION_SNAPSHOT_FILE"):
+            raise ValueError("独立 run 输出只接受完整正式输入")
     source = root / "module"
     if source.is_symlink() or (source / "module.prop").is_symlink():
         raise ValueError("模块输入不得通过符号链接读取")
@@ -148,13 +157,31 @@ def build(root):
                 raise ValueError("已有正式构建收据不同，拒绝覆盖")
         else:
             receipt.write_bytes(encoded(report))
+    if artifact is not None:
+        if value["local_validation"]:
+            raise ValueError("独立 run 不接受本地验证包")
+        # dist 保留原始分发包；run 路径只发布同一字节，不再生成第二种包。
+        with tempfile.TemporaryDirectory(prefix=".module-run-", dir=artifact.parent) as temporary:
+            candidate = Path(temporary) / "module.zip"
+            shutil.copyfile(final, candidate)
+            if verify(candidate, value, files) != report:
+                raise ValueError("独立 run 包复制后回读不同")
+            try:
+                os.link(candidate, artifact)
+            except FileExistsError:
+                if artifact.is_symlink() or artifact.read_bytes() != candidate.read_bytes():
+                    raise ValueError("独立 run 路径已有不同制品，拒绝覆盖")
+        final = artifact
     return final, report
 
 
 if __name__ == "__main__":
-    argparse.ArgumentParser(description=__doc__).parse_args()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("artifact", nargs="?", type=Path,
+                        help="Core package_run.py 提供的本 run 最终 ZIP 路径")
+    args = parser.parse_args()
     try:
-        artifact, report = build(ROOT)
+        artifact, report = build(ROOT, args.artifact)
         value = report["build"]
         print("magisk build\n  version    " + value["version"] +
               "\n  build      " + str(value.get("build_number", "local")) +

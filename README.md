@@ -63,6 +63,10 @@ USB 充电/连接通知没有对应的 `persist.adb.notify` 属性开关，模�
 
 包旁的 JSON 收据记录包内身份、ZIP SHA-256 和实际大小；已安装模块可用 `su -c usb-adb-notify --build-info` 读取原包身份。包回读成功与 Android/Magisk 实际安装升级分别验收。历史源码编号 `3` 仅是已知下界，正式状态初始化仍须核对完整分发历史。
 
+无常驻 Job 的正式 run 使用已保存的 `config/package-runs/module.json` 与 Core 的 `shared/package_run.py`。调用方提供冻结的 `1.0.0` checkout、明确 Core、持久制品根和收据根；入口分配并保存一次输入快照，再调用现有 `scripts/build.sh`。`dist/` 中的正式原包与 run 内的 ZIP 保持相同字节，同 run 重放复用原号和原包。此入口不上传 GitHub Release，也不安装设备。
+
+历史 GitHub `v1.0.1` ZIP 的模块 ID 为 `usb_adb_notify_toggle`；当前源码在命名改动后使用 `usb-adb-notify-toggle`。两者属于不同 Magisk 安装目录，不能把当前包构建成功视为旧 ID 的就地升级。发布和设备验收时须核实实际安装身份及旧模块处理，历史 Release 保留原始字节。
+
 ```bash
 python3 scripts/test_build_package.py
 # 显式测试候选 Core；测试自行建立临时 Git 仓与状态，不改生产状态。
